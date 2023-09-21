@@ -5,8 +5,12 @@ import (
 	"Rest_api_authentication/pkg/handler"
 	"Rest_api_authentication/pkg/repository"
 	"Rest_api_authentication/pkg/service"
+	"context"
 	"log"
+	"os"
+	"time"
 
+	"github.com/joho/godotenv"
 	"github.com/spf13/viper"
 )
 
@@ -14,7 +18,24 @@ func main() {
 	if err := initConfig(); err != nil {
 		log.Fatalf("error init configs %s", err.Error())
 	}
-	repos := repository.NewRepository()
+
+	if err := godotenv.Load(); err != nil {
+		log.Fatalf("error init env var %s", err.Error())
+	}
+
+	ctx, cancel := context.WithTimeout(context.Background(), 10*time.Second)
+	defer cancel()
+	client, err := repository.NewMongoDB(ctx, repository.Config{
+		Username: viper.GetString("client.username"),
+		Password: os.Getenv("MONGODB_PASSWORD"),
+		Host:     viper.GetString("client.host"),
+		Port:     viper.GetString("client.port"),
+	})
+	if err != nil {
+		log.Fatalf("failed to initialize mongo %s", err.Error())
+	}
+
+	repos := repository.NewRepository(client)
 	services := service.NewService(repos)
 	handlers := handler.NewHandler(services)
 

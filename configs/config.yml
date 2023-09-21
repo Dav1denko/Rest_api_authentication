@@ -1,1 +1,6 @@
 port: "8000"
+
+client:
+  username: "user"
+  host: "localhost"
+  port: "27019"
