@@ -20,6 +20,7 @@ func (h *Handler) InitRoutes() *gin.Engine {
 	auth := router.Group("/auth")
 	{
 		auth.GET("/:GUID", h.GetTokens)
+		auth.GET("/:GUID/refresh/", h.RefreshTokens)
 	}
 	return router
 }

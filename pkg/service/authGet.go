@@ -70,3 +70,11 @@ func (s *AuthService) SaveRefreshToken(GUID int, RefreshToken string) {
 	}
 	s.repo.SaveTokens(GUID, hashedRefreshToken)
 }
+
+func (s *AuthService) RefreshTokens(GUID int, CookieRefreshToken string) (bool, error) {
+	if s.repo.GetRefreshTokens(GUID, CookieRefreshToken) {
+		return true, nil
+	}
+
+	return false, nil
+}

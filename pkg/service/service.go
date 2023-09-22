@@ -8,6 +8,7 @@ import (
 type Authorization interface {
 	GetTokens(GUID int) (restapiauthentication.Info, error)
 	SaveRefreshToken(GUID int, RefreshToken string)
+	RefreshTokens(GUID int, CookieRefreshToken string) (bool, error)
 }
 
 type Service struct {
