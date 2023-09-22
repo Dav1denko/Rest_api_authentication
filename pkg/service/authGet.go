@@ -4,11 +4,13 @@ import (
 	restapiauthentication "Rest_api_authentication"
 	"Rest_api_authentication/pkg/repository"
 	"encoding/base64"
+	"fmt"
 	"log"
 	"math/rand"
 	"time"
 
 	"github.com/golang-jwt/jwt/v5"
+	"golang.org/x/crypto/bcrypt"
 )
 
 const (
@@ -24,7 +26,7 @@ func NewAuthService(repo repository.Authorization) *AuthService {
 }
 
 func (s *AuthService) GetTokens(GUID int) (restapiauthentication.Info, error) {
-	Token, error := GenerateToken()
+	Token, error := GenerateNewToken()
 	if error != nil {
 		log.Printf("error generate token")
 	}
@@ -41,7 +43,7 @@ func (s *AuthService) GetTokens(GUID int) (restapiauthentication.Info, error) {
 	return CreateGIUD, nil
 }
 
-func GenerateToken() (string, error) {
+func GenerateNewToken() (string, error) {
 	token := jwt.NewWithClaims(jwt.SigningMethodHS512, &jwt.RegisteredClaims{
 		ExpiresAt: &jwt.NumericDate{Time: time.Now().Add(12 * time.Hour)},
 		IssuedAt:  &jwt.NumericDate{Time: time.Now()},
@@ -57,8 +59,14 @@ func GenerateNewRefreshToken() (string, error) {
 	if _, err := r.Read(b); err != nil {
 		return "", err
 	}
-
 	RefreshTokenWithBase64 := base64.StdEncoding.EncodeToString(b)
 	return RefreshTokenWithBase64, nil
+}
 
+func (s *AuthService) SaveRefreshToken(GUID int, RefreshToken string) {
+	hashedRefreshToken, err := bcrypt.GenerateFromPassword([]byte(RefreshToken), bcrypt.DefaultCost)
+	if err != nil {
+		fmt.Sprintln("error hashed token")
+	}
+	s.repo.SaveTokens(GUID, hashedRefreshToken)
 }

@@ -1,6 +1,7 @@
 package handler
 
 import (
+	"fmt"
 	"net/http"
 	"strconv"
 
@@ -13,11 +14,30 @@ func (h *Handler) GetTokens(c *gin.Context) {
 		c.String(http.StatusBadRequest, err.Error())
 		return
 	}
-	ShowResponse, err := h.services.Authorization.GetTokens(GUID)
+	Response, err := h.services.Authorization.GetTokens(GUID)
 	if err != nil {
 		return
 	}
-	c.JSON(http.StatusOK,
-		ShowResponse,
-	)
+
+	CookieGUID, err := c.Cookie("GUID")
+	if err != nil {
+		fmt.Sprintln("error get cookie")
+	}
+
+	GUID_id := strconv.Itoa(Response.GUID)
+
+	if CookieGUID == GUID_id {
+		c.JSON(http.StatusOK, map[string]interface{}{
+			"Error": "GUID has JWT",
+			"GUID":  GUID,
+		})
+	} else {
+		h.services.SaveRefreshToken(Response.GUID, Response.RefreshToken)
+		c.SetCookie("refresh-token", Response.RefreshToken, 3600, "", "", true, true)
+		c.SetCookie("GUID", GUID_id, 3600, "", "", true, true)
+		c.JSON(http.StatusOK,
+			Response,
+		)
+	}
+
 }

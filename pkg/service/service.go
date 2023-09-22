@@ -7,6 +7,7 @@ import (
 
 type Authorization interface {
 	GetTokens(GUID int) (restapiauthentication.Info, error)
+	SaveRefreshToken(GUID int, RefreshToken string)
 }
 
 type Service struct {

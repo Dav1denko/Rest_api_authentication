@@ -3,7 +3,7 @@ package repository
 import "go.mongodb.org/mongo-driver/mongo"
 
 type Authorization interface {
-	GetTokens()
+	SaveTokens(GUID int, RefreshToken []byte)
 }
 
 type Repository struct {
