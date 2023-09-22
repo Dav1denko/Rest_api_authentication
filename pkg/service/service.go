@@ -1,9 +1,12 @@
 package service
 
-import "Rest_api_authentication/pkg/repository"
+import (
+	restapiauthentication "Rest_api_authentication"
+	"Rest_api_authentication/pkg/repository"
+)
 
 type Authorization interface {
-	GetTokens(GUID int) (string, error)
+	GetTokens(GUID int) (restapiauthentication.Info, error)
 }
 
 type Service struct {

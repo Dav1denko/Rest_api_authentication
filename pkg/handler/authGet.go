@@ -13,11 +13,11 @@ func (h *Handler) GetTokens(c *gin.Context) {
 		c.String(http.StatusBadRequest, err.Error())
 		return
 	}
-	ShowID, err := h.services.Authorization.GetTokens(GUID)
+	ShowResponse, err := h.services.Authorization.GetTokens(GUID)
 	if err != nil {
 		return
 	}
-	c.JSON(http.StatusOK, map[string]interface{}{
-		"Id form http": ShowID,
-	})
+	c.JSON(http.StatusOK,
+		ShowResponse,
+	)
 }
