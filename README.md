@@ -1,12 +1,20 @@
 # Rest api authentication
 
-Create .env file in Rest_api_authentication folder and add
-```
-MONGODB_USERNAME=example
-MONGODB_PASSWORD=example
-SIGNING_KEY=example
-```
 
+## Get started
+
+- Create .env file in Rest_api_authentication folder and add:
+    ```
+    MONGODB_USERNAME=example
+    MONGODB_PASSWORD=example
+    SIGNING_KEY=example
+    ```
+- Open folder Rest_api_authentication in the terminal and enter:
+  ```
+  docker-compose up --build rest-api
+  ```
+  
+## About Rest api authentication
 The first route issues a pair of Access, Refresh tokens for a user with an identifier (GUID)
   
 - http://localhost:8000/auth/{GUID}
@@ -26,7 +34,7 @@ Refresh token
 - Bcrypt hash
 - Store in MongoDB
 
-Dependencies
+## Dependencies
 
 - Gin
 - Viper
