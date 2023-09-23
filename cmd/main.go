@@ -26,7 +26,7 @@ func main() {
 	ctx, cancel := context.WithTimeout(context.Background(), 10*time.Second)
 	defer cancel()
 	client, err := repository.NewMongoDB(ctx, repository.Config{
-		Username: viper.GetString("client.username"),
+		Username: os.Getenv("MONGODB_USERNAME"),
 		Password: os.Getenv("MONGODB_PASSWORD"),
 		Host:     viper.GetString("client.host"),
 		Port:     viper.GetString("client.port"),

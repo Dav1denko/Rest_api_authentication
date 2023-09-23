@@ -7,14 +7,11 @@ import (
 	"fmt"
 	"log"
 	"math/rand"
+	"os"
 	"time"
 
 	"github.com/golang-jwt/jwt/v5"
 	"golang.org/x/crypto/bcrypt"
-)
-
-const (
-	signingKey = "dfsdfsasdfsdfsdfsdfa"
 )
 
 type AuthService struct {
@@ -44,6 +41,8 @@ func (s *AuthService) GetTokens(GUID int) (restapiauthentication.Info, error) {
 }
 
 func GenerateNewToken() (string, error) {
+
+	signingKey := os.Getenv("SIGNING_KEY")
 	token := jwt.NewWithClaims(jwt.SigningMethodHS512, &jwt.RegisteredClaims{
 		ExpiresAt: &jwt.NumericDate{Time: time.Now().Add(12 * time.Hour)},
 		IssuedAt:  &jwt.NumericDate{Time: time.Now()},

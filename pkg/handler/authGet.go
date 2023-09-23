@@ -69,7 +69,7 @@ func (h *Handler) RefreshTokens(c *gin.Context) {
 		)
 	} else {
 		c.JSON(http.StatusOK, map[string]interface{}{
-			"Error": "GUID has JWT",
+			"Error": "error refresh token",
 			"GUID":  GUID,
 		})
 	}
