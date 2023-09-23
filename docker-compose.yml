@@ -1,0 +1,23 @@
+version: '3.8'
+
+services:
+  rest-api:
+    build: ./
+    command: ./rest-api
+    ports:
+      - 8000:8000
+    depends_on:
+      - mongo
+    environment:
+      - MONGODB_USERNAME=user
+      - MONGODB_PASSWORD=pass
+      - SIGNING_KEY=asdfg3234jasf3dsfaf2sdfa
+
+  mongo:
+    image: mongo:7.0
+    restart: always
+    ports:
+      - 27017:27017
+    environment:
+      MONGO_INITDB_ROOT_USERNAME: user
+      MONGO_INITDB_ROOT_PASSWORD: pass

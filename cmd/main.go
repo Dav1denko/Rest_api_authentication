@@ -23,7 +23,7 @@ func main() {
 		log.Fatalf("error init env var %s", err.Error())
 	}
 
-	ctx, cancel := context.WithTimeout(context.Background(), 10*time.Second)
+	ctx, cancel := context.WithTimeout(context.Background(), 60*time.Second)
 	defer cancel()
 	client, err := repository.NewMongoDB(ctx, repository.Config{
 		Username: os.Getenv("MONGODB_USERNAME"),

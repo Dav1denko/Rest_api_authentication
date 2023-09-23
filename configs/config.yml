@@ -1,5 +1,5 @@
 port: "8000"
 
 client:
-  host: "localhost"
-  port: "27019"
+  host: "mongo"
+  port: "27017"
